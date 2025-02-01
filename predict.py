@@ -5,10 +5,8 @@ import numpy as np
 import json
 
 
-# Disable GPU usage
-tf.config.set_visible_devices([], 'GPU')
 # Load the model
-model_path = '/app/Plant_Leaf_Model15.keras'
+model_path = 'Plant_Leaf_ModelA6.keras'
 model = tf.keras.models.load_model(model_path)
 
 
