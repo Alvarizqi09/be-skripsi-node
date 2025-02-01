@@ -5,7 +5,7 @@ import numpy as np
 import json
 
 # Load the model
-model_path = "Plant_Leaf_ModelA6.keras"
+model_path = "Plant_Leaf_Model15.keras"
 model = tf.keras.models.load_model(model_path)
 
 class_names = ["Corn Common Rust",  "Corn Gray Leaf Spot","Corn Healthy","Corn Northern Leaf Blight" ]
