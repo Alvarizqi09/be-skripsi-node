@@ -33,7 +33,7 @@ const upload = multer({ storage });
 app.post("/predict", upload.single("image"), (req, res) => {
   const imagePath = path.join(__dirname, "uploads", req.file.filename);
 
-  exec(`python predict.py "${imagePath}"`, (err, stdout, stderr) => {
+  exec(`python3 predict.py "${imagePath}"`, (err, stdout, stderr) => {
     if (err) {
       console.error("Error executing Python script:", stderr);
       return res.status(500).send({ error: "Prediction failed" });
