@@ -3,17 +3,13 @@ const multer = require("multer");
 const path = require("path");
 const { exec } = require("child_process");
 const fs = require("fs");
-const cors = require("cors"); // Import cors
+const cors = require("cors");
 
 const app = express();
 const port = 5000;
 
-// Use CORS middleware to allow requests from your React frontend
-app.use(cors()); // This allows all domains to access this server
-// For stricter control, you can specify only specific domains like:
-// app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors());
 
-// Set up storage engine for multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -25,11 +21,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Endpoint to handle image upload and prediction
 app.post("/predict", upload.single("image"), (req, res) => {
   const imagePath = path.join(__dirname, "uploads", req.file.filename);
 
-  // Call the Python script to predict the image
   exec(`python predict.py "${imagePath}"`, (err, stdout, stderr) => {
     if (err) {
       console.error("Error executing Python script:", stderr);
@@ -40,9 +34,8 @@ app.post("/predict", upload.single("image"), (req, res) => {
       console.error("Python script stderr:", stderr);
     }
 
-    // Clean up stdout to only include the JSON result
     try {
-      const jsonString = stdout.trim().split("\n").pop(); // Clean the logging output
+      const jsonString = stdout.trim().split("\n").pop();
       const result = JSON.parse(jsonString);
       res.json(result);
     } catch (parseError) {
@@ -50,7 +43,6 @@ app.post("/predict", upload.single("image"), (req, res) => {
       res.status(500).send({ error: "Error parsing Python output" });
     }
 
-    // Clean up uploaded image
     fs.unlinkSync(imagePath);
   });
 });
